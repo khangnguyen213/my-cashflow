@@ -3,6 +3,14 @@
 import { AssetItem, AssetType } from '@/common/AssetItem';
 import React, { createContext, useState } from 'react';
 
+export const SideNavBarContext = createContext<{
+    isSideNavBarOpen: boolean;
+    setIsSideNavBarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}>({
+    isSideNavBarOpen: false,
+    setIsSideNavBarOpen: () => {},
+});
+
 export const DataContext = createContext<{
     incomeStatementSummary: IncomeStatementSummary | null;
     setIncomeStatementSummary: React.Dispatch<
@@ -22,6 +30,8 @@ function ContextProvider({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const [isSideNavBarOpen, setIsSideNavBarOpen] = useState<boolean>(false);
+
     const [incomeStatementSummary, setIncomeStatementSummary] =
         useState<IncomeStatementSummary>({
             total_income: 0,
@@ -106,7 +116,13 @@ function ContextProvider({
     };
 
     return (
-        <DataContext.Provider value={value}>{children}</DataContext.Provider>
+        <DataContext.Provider value={value}>
+            <SideNavBarContext.Provider
+                value={{ isSideNavBarOpen, setIsSideNavBarOpen }}
+            >
+                {children}
+            </SideNavBarContext.Provider>
+        </DataContext.Provider>
     );
 }
 

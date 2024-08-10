@@ -15,7 +15,7 @@ import {
     AccordionTrigger,
 } from '@/components/ui/accordion';
 import numberToDollar from '@/utils/NumberToDollar';
-import { DataContext } from '../ContextProvider';
+import { DataContext } from '../../ContextProvider';
 import { AssetItem, AssetType } from '@/common/AssetItem';
 
 function SectionAsset() {
