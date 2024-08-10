@@ -202,11 +202,11 @@ export class AssetItem {
         return this.title;
     }
 
-    getBuy_price() {
+    getBuyPrice() {
         return this.buy_price;
     }
 
-    getSell_price() {
+    getSellPrice() {
         return this.sell_price;
     }
 
@@ -262,11 +262,11 @@ export class AssetItem {
         this.title = title;
     }
 
-    setBuy_price(buy_price: number) {
+    setBuyPrice(buy_price: number) {
         this.buy_price = buy_price;
     }
 
-    setSell_price(sell_price: number) {
+    setSellPrice(sell_price: number) {
         this.sell_price = sell_price;
     }
 
