@@ -64,30 +64,55 @@ function ContextProvider({
             monthly_cashflow: 0,
         });
 
-    const sampleAssetItems: AssetItem[] = [
-        new AssetItem('AAPL', 250, 0, 0, 2, 0, AssetType.STOCK, ''),
-        new AssetItem('MYT4U', 1200, 0, 0, 1, 20, AssetType.STOCK, ''),
-        new AssetItem(
-            'House 3Be/2Ba',
-            30000,
-            10000,
-            20000,
-            1,
-            200,
-            AssetType.REALESTATE,
-            'Buy together with Kan at rate 50:50'
-        ),
-        new AssetItem(
-            'Part-time Business',
-            5000,
-            5000,
-            0,
-            -120,
-            0,
-            AssetType.BUSINESS,
-            ''
-        ),
-    ];
+    const sampleAssetItems: AssetItem[] = [];
+
+    const sampleJob = new AssetItem();
+    sampleJob.setUpJob('Engineer', 40000, 1000, 3500);
+
+    const sampleStock1 = new AssetItem();
+    sampleStock1.setUpStock('AAPL', 250, 1, 0, '');
+
+    const sampleStock2 = new AssetItem();
+    sampleStock2.setUpStock('MYT4U', 1200, 1, 10, '');
+
+    const sampleRealEstate1 = new AssetItem();
+    sampleRealEstate1.setUpRealEstate(
+        'House 2Br/1Ba',
+        20000,
+        5000,
+        15000,
+        120,
+        ''
+    );
+
+    const sampleRealEstate2 = new AssetItem();
+    sampleRealEstate2.setUpRealEstate(
+        'House 3Br/2Ba',
+        15000,
+        5000,
+        10000,
+        75,
+        'Buy togther with Kan at rate 1:1 so the statis already calculated at 50%'
+    );
+
+    const sampleBusiness = new AssetItem();
+    sampleBusiness.setUpBusiness(
+        'Part-time Business',
+        10000,
+        0,
+        10000,
+        -180,
+        ''
+    );
+
+    sampleAssetItems.push(
+        sampleJob,
+        sampleStock1,
+        sampleStock2,
+        sampleRealEstate1,
+        sampleRealEstate2,
+        sampleBusiness
+    );
 
     const [assetItems, setAssetItems] = useState<AssetItem[]>(sampleAssetItems);
 
