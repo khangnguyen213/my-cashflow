@@ -23,9 +23,15 @@ function SectionAsset() {
     const { assetItems, incomeStatementSummary, setIncomeStatementSummary } =
         useContext(DataContext);
 
-    const stocks = assetItems.filter(
-        (item) => item.getType() === AssetType.STOCK
-    );
+    const stocks: AssetItem[] = [];
+    const realEstates: AssetItem[] = [];
+    const businesses: AssetItem[] = [];
+
+    assetItems.forEach((item) => {
+        if (item.getType() === AssetType.STOCK) stocks.push(item);
+        if (item.getType() === AssetType.REALESTATE) realEstates.push(item);
+        if (item.getType() === AssetType.BUSINESS) businesses.push(item);
+    });
 
     return (
         <div className="md:w-[48%]">
@@ -64,8 +70,71 @@ function SectionAsset() {
                                 ))}
                             </TableBody>
                         </Table>
+
+                        {/* Real Estates */}
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="text-left break-all">
+                                        Real Estate:
+                                    </TableHead>
+                                    <TableHead className="text-left">
+                                        Down Pay:
+                                    </TableHead>
+                                    <TableHead className="text-left">
+                                        Cost:
+                                    </TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {realEstates.map((item) => (
+                                    <TableRow key={item.getId()}>
+                                        <TableCell>{item.getTitle()}</TableCell>
+                                        <TableCell>
+                                            {numberToDollar(
+                                                item.getDownpayment()
+                                            )}
+                                        </TableCell>
+                                        <TableCell>
+                                            {numberToDollar(item.getBuyPrice())}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+
+                        {/* Businesses */}
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="text-left break-all">
+                                        Business:
+                                    </TableHead>
+                                    <TableHead className="text-left">
+                                        Down Pay:
+                                    </TableHead>
+                                    <TableHead className="text-left">
+                                        Cost:
+                                    </TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {businesses.map((item) => (
+                                    <TableRow key={item.getId()}>
+                                        <TableCell>{item.getTitle()}</TableCell>
+                                        <TableCell>
+                                            {numberToDollar(
+                                                item.getDownpayment()
+                                            )}
+                                        </TableCell>
+                                        <TableCell>
+                                            {numberToDollar(item.getBuyPrice())}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
                     </div>
-                    <h1 className="pt-4 text-center">Income Summary</h1>
                 </AccordionContent>
             </AccordionItem>
         </div>

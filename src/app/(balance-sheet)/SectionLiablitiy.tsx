@@ -20,152 +20,137 @@ import { DataContext } from '../ContextProvider';
 import { AssetItem, AssetType } from '@/common/AssetItem';
 
 function SectionLiability() {
-    const {
-        assetItems,
-        jobCard,
-        incomeStatementSummary,
-        setIncomeStatementSummary,
-    } = useContext(DataContext);
+    const { assetItems, incomeStatementSummary, setIncomeStatementSummary } =
+        useContext(DataContext);
 
-    const expenses: AssetItem[] = [];
-
-    const childcareExpenses = assetItems.filter(
-        (item) => item.getType() === AssetType.CHILDCARE
+    const homeMortage = assetItems.find(
+        (item) => item.getType() === AssetType.HOME && item.getLoan() > 0
     );
 
-    assetItems.forEach((item) => {
-        if (
-            (item.getCashflow() < 0 || item.getLoanInterest() > 0) &&
-            item.getType() !== AssetType.CHILDCARE
-        )
-            expenses.push(item);
-    });
+    const carLoan = assetItems.find(
+        (item) => item.getType() === AssetType.CAR && item.getLoan() > 0
+    );
 
-    const calculateExpense = () => {
-        const totalExpense =
-            expenses.reduce((acc, item) => {
-                if (item.getLoanInterest() > 0) {
-                    return acc + item.getLoanInterest();
-                }
-                return acc - item.getCashflow();
-            }, 0) + childcareExpenses[0].getCashflow();
+    const schoolLoan = assetItems.find(
+        (item) => item.getType() === AssetType.JOB && item.getLoan() > 0
+    );
 
-        setIncomeStatementSummary((prev) => {
-            return {
-                ...prev,
-                total_expenses: totalExpense,
-                monthly_cashflow: prev.total_income - totalExpense,
-            };
-        });
-    };
+    const creditCardLoan = assetItems.find(
+        (item) => item.getType() === AssetType.CREDIT_CARD && item.getLoan() > 0
+    );
 
-    useEffect(() => {
-        calculateExpense();
-    }, []);
+    const realEstateMortages = assetItems.filter(
+        (item) =>
+            item.getType() === AssetType.REALESTATE && item.getMortgage() > 0
+    );
+
+    const businessMortages = assetItems.filter(
+        (item) =>
+            item.getType() === AssetType.BUSINESS && item.getMortgage() > 0
+    );
+
     return (
         <div className="md:w-[48%]">
             <AccordionItem value="section-liability">
-                <AccordionTrigger>4. Liabilities</AccordionTrigger>
+                <AccordionTrigger>3. Assets</AccordionTrigger>
                 <AccordionContent>
-                    <div className="w-full flex flex-wrap border-2">
+                    <div className="flex flex-wrap border-2">
+                        {/* Stocks */}
+                        <Table>
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell>Home Mortage</TableCell>
+                                    <TableCell>
+                                        {numberToDollar(
+                                            homeMortage
+                                                ? homeMortage.getLoan()
+                                                : 0
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell>School Loan</TableCell>
+                                    <TableCell>
+                                        {numberToDollar(
+                                            schoolLoan
+                                                ? schoolLoan.getLoan()
+                                                : 0
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell>Car Loan</TableCell>
+                                    <TableCell>
+                                        {numberToDollar(
+                                            carLoan ? carLoan.getLoan() : 0
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell>Credit Cards</TableCell>
+                                    <TableCell>
+                                        {numberToDollar(
+                                            creditCardLoan
+                                                ? creditCardLoan.getLoan()
+                                                : 0
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+
+                        {/* Real Estates */}
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead className="text-center">
-                                        Description
+                                    <TableHead className="text-left break-all">
+                                        Real Estate:
                                     </TableHead>
-                                    <TableHead className="text-right">
-                                        Cashflow
+                                    <TableHead className="text-left">
+                                        Mortgage:
                                     </TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {expenses.map((item) => {
-                                    let title = '';
-                                    let amount = '';
-                                    if (item.getLoanInterest() > 0) {
-                                        title =
-                                            item.getType() === AssetType.JOB
-                                                ? 'Education loan interest: '
-                                                : 'Loan interest: ' +
-                                                  item.getTitle();
-                                        amount = numberToDollar(
-                                            -item.getLoanInterest()
-                                        );
-                                    } else {
-                                        title = item.getTitle() + ' expense';
-                                        amount = numberToDollar(
-                                            item.getCashflow()
-                                        );
-                                    }
-                                    return (
-                                        <TableRow key={item.getId()}>
-                                            <TableCell className="font-medium">
-                                                {title}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                {amount}
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
+                                {realEstateMortages.map((item) => (
+                                    <TableRow key={item.getId()}>
+                                        <TableCell>{item.getTitle()}</TableCell>
 
-                                {childcareExpenses.length > 0 && (
-                                    <TableRow>
-                                        <TableCell className="font-medium">
-                                            Childcare
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            {numberToDollar(
-                                                childcareExpenses[0].getExpensePerChild()
-                                            )}{' '}
-                                            x {childcareExpenses[0].getQty()} ={' '}
-                                            {numberToDollar(
-                                                childcareExpenses[0].getCashflow()
-                                            )}
+                                        <TableCell>
+                                            {numberToDollar(item.getMortgage())}
                                         </TableCell>
                                     </TableRow>
-                                )}
+                                ))}
+                            </TableBody>
+                        </Table>
+
+                        {/* Businesses */}
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="text-left break-all">
+                                        Business:
+                                    </TableHead>
+                                    <TableHead className="text-left">
+                                        Mortgage:
+                                    </TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {businessMortages.map((item) => (
+                                    <TableRow key={item.getId()}>
+                                        <TableCell>{item.getTitle()}</TableCell>
+
+                                        <TableCell>
+                                            {numberToDollar(item.getMortgage())}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
                             </TableBody>
                         </Table>
                     </div>
-                    <h1 className="pt-4 text-center">Expenses Summary</h1>
                 </AccordionContent>
             </AccordionItem>
-            <div className="w-full border-2">
-                <Table>
-                    <TableFooter>
-                        <TableRow>
-                            <TableCell className="text-right font-medium">
-                                - Total Expenses
-                            </TableCell>
-                            <TableCell className="text-right">
-                                {incomeStatementSummary &&
-                                    numberToDollar(
-                                        incomeStatementSummary.total_expenses
-                                    )}
-                            </TableCell>
-                        </TableRow>
-                    </TableFooter>
-                </Table>
-            </div>
-            <div className="w-full border-2 mt-4">
-                <Table>
-                    <TableFooter>
-                        <TableRow>
-                            <TableCell className="text-center font-bold text-base">
-                                = Monthly Cashflow
-                            </TableCell>
-                            <TableCell className="text-right text-base font-medium">
-                                {incomeStatementSummary &&
-                                    numberToDollar(
-                                        incomeStatementSummary.monthly_cashflow
-                                    )}
-                            </TableCell>
-                        </TableRow>
-                    </TableFooter>
-                </Table>
-            </div>
         </div>
     );
 }
