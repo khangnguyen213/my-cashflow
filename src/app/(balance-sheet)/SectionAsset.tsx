@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import {
     Table,
     TableBody,
     TableCell,
-    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
@@ -20,8 +19,7 @@ import { DataContext } from '../ContextProvider';
 import { AssetItem, AssetType } from '@/common/AssetItem';
 
 function SectionAsset() {
-    const { assetItems, incomeStatementSummary, setIncomeStatementSummary } =
-        useContext(DataContext);
+    const { assetItems } = useContext(DataContext);
 
     const stocks: AssetItem[] = [];
     const realEstates: AssetItem[] = [];

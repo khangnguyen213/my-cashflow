@@ -20,12 +20,8 @@ import { DataContext } from '../ContextProvider';
 import { AssetItem, AssetType } from '@/common/AssetItem';
 
 function SectionExpense() {
-    const {
-        assetItems,
-        jobCard,
-        incomeStatementSummary,
-        setIncomeStatementSummary,
-    } = useContext(DataContext);
+    const { assetItems, incomeStatementSummary, setIncomeStatementSummary } =
+        useContext(DataContext);
 
     const expenses: AssetItem[] = [];
 

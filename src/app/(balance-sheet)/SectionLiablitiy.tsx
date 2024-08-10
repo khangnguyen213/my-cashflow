@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import {
     Table,
     TableBody,
     TableCell,
-    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
@@ -17,11 +16,10 @@ import {
 } from '@/components/ui/accordion';
 import numberToDollar from '@/utils/NumberToDollar';
 import { DataContext } from '../ContextProvider';
-import { AssetItem, AssetType } from '@/common/AssetItem';
+import { AssetType } from '@/common/AssetItem';
 
 function SectionLiability() {
-    const { assetItems, incomeStatementSummary, setIncomeStatementSummary } =
-        useContext(DataContext);
+    const { assetItems } = useContext(DataContext);
 
     const homeMortage = assetItems.find(
         (item) => item.getType() === AssetType.HOME && item.getLoan() > 0
@@ -52,7 +50,7 @@ function SectionLiability() {
     return (
         <div className="md:w-[48%]">
             <AccordionItem value="section-liability">
-                <AccordionTrigger>3. Assets</AccordionTrigger>
+                <AccordionTrigger>4. Liabilities</AccordionTrigger>
                 <AccordionContent>
                     <div className="flex flex-wrap border-2">
                         {/* Stocks */}
