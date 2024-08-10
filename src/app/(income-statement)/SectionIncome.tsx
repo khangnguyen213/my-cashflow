@@ -17,55 +17,56 @@ import {
 } from '@/components/ui/accordion';
 import numberToDollar from '@/utils/NumberToDollar';
 import { DataContext } from '../ContextProvider';
-import { AssetType } from '@/common/AssetItem';
+import { AssetItem, AssetType } from '@/common/AssetItem';
 
 function SectionIncome() {
-    const {
-        assetItems,
-        jobCard,
-        incomeStatementSummary,
-        setIncomeStatementSummary,
-    } = useContext(DataContext);
-    console.log(assetItems);
-    const incomeItems = [
-        {
-            title: 'AAPL',
-            amount: 250,
-            type: AssetType.STOCK,
-        },
-        {
-            title: 'AAPL',
-            amount: 150,
-            type: AssetType.STOCK,
-        },
-        {
-            title: 'House 3Br/2Ba',
-            amount: 350,
-            type: AssetType.REALESTATE,
-        },
-        {
-            title: 'Part-time Business',
-            amount: 450,
-            type: AssetType.BUSINESS,
-        },
-    ];
+    const { assetItems, incomeStatementSummary, setIncomeStatementSummary } =
+        useContext(DataContext);
 
-    const calculateTotalIncome = () => {
-        const totalIncome =
-            incomeItems.reduce((acc, item) => acc + item.amount, 0) +
-            (jobCard?.salary || 0);
+    const jobs: AssetItem[] = [];
+    const stockIncomes: AssetItem[] = [];
+    const realestateIncomes: AssetItem[] = [];
+    const businesseIncomes: AssetItem[] = [];
 
-        setIncomeStatementSummary((prev) => ({
-            ...prev,
-            total_income: totalIncome,
-            monthly_cashflow: totalIncome - prev.total_expenses,
-        }));
+    assetItems.forEach((item) => {
+        switch (item.getType()) {
+            case AssetType.JOB:
+                jobs.push(item);
+                break;
+            case AssetType.STOCK:
+                if (item.getCashflow() > 0) stockIncomes.push(item);
+                break;
+            case AssetType.REALESTATE:
+                if (item.getCashflow() > 0) realestateIncomes.push(item);
+                break;
+            case AssetType.BUSINESS:
+                if (item.getCashflow() > 0) businesseIncomes.push(item);
+                break;
+        }
+    });
 
-        return totalIncome;
+    const calculateIncome = () => {
+        const jobSalary = jobs.reduce(
+            (acc, item) => acc + item.getCashflow(),
+            0
+        );
+
+        const passiveIncome = stockIncomes
+            .concat(realestateIncomes)
+            .concat(businesseIncomes)
+            .reduce((acc, item) => acc + item.getCashflow(), 0);
+
+        setIncomeStatementSummary((prev) => {
+            return {
+                ...prev,
+                total_income: jobSalary + passiveIncome,
+                passive_income: passiveIncome,
+            };
+        });
     };
 
     useEffect(() => {
-        calculateTotalIncome();
+        calculateIncome();
     }, []);
 
     return (
@@ -95,14 +96,18 @@ function SectionIncome() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                <TableRow>
-                                    <TableCell className="font-medium">
-                                        {jobCard?.title}
-                                    </TableCell>
-                                    <TableCell className="text-right">
-                                        {numberToDollar(jobCard?.salary || 0)}
-                                    </TableCell>
-                                </TableRow>
+                                {jobs.length > 0 && (
+                                    <TableRow>
+                                        <TableCell className="font-medium">
+                                            {jobs[0].getTitle()}
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            {numberToDollar(
+                                                jobs[0].getCashflow()
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                )}
                             </TableBody>
                         </Table>
 
@@ -116,20 +121,16 @@ function SectionIncome() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {incomeItems
-                                    .filter(
-                                        (item) => item.type == AssetType.STOCK
-                                    )
-                                    .map((item) => (
-                                        <TableRow key={item.title}>
-                                            <TableCell className="font-medium">
-                                                {item.title}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                {numberToDollar(item.amount)}
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
+                                {stockIncomes.map((item) => (
+                                    <TableRow key={item.getId()}>
+                                        <TableCell className="font-medium">
+                                            {item.getTitle()}
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            {numberToDollar(item.getCashflow())}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
                             </TableBody>
                         </Table>
 
@@ -143,22 +144,26 @@ function SectionIncome() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {incomeItems
-                                    .filter(
-                                        (item) =>
-                                            item.type == AssetType.REALESTATE ||
-                                            item.type == AssetType.BUSINESS
-                                    )
-                                    .map((item) => (
-                                        <TableRow key={item.title}>
-                                            <TableCell className="font-medium">
-                                                {item.title}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                {numberToDollar(item.amount)}
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
+                                {realestateIncomes.map((item) => (
+                                    <TableRow key={item.getId()}>
+                                        <TableCell className="font-medium">
+                                            {item.getTitle()}
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            {numberToDollar(item.getCashflow())}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                                {businesseIncomes.map((item) => (
+                                    <TableRow key={item.getId()}>
+                                        <TableCell className="font-medium">
+                                            {item.getTitle()}
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            {numberToDollar(item.getCashflow())}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
                             </TableBody>
                         </Table>
                     </div>
@@ -173,7 +178,9 @@ function SectionIncome() {
                                 Salary
                             </TableCell>
                             <TableCell className="text-right">
-                                {numberToDollar(jobCard?.salary || 0)}
+                                {jobs.length > 0
+                                    ? numberToDollar(jobs[0].getCashflow())
+                                    : 0}
                             </TableCell>
                         </TableRow>
                         <TableRow>
@@ -182,10 +189,8 @@ function SectionIncome() {
                             </TableCell>
                             <TableCell className="text-right">
                                 {incomeStatementSummary &&
-                                    jobCard &&
                                     numberToDollar(
-                                        incomeStatementSummary.total_income -
-                                            jobCard.salary
+                                        incomeStatementSummary.passive_income
                                     )}
                             </TableCell>
                         </TableRow>

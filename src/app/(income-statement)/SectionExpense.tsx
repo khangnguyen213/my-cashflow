@@ -17,28 +17,51 @@ import {
 } from '@/components/ui/accordion';
 import numberToDollar from '@/utils/NumberToDollar';
 import { DataContext } from '../ContextProvider';
+import { AssetItem, AssetType } from '@/common/AssetItem';
 
 function SectionExpense() {
-    const { jobCard, incomeStatementSummary, setIncomeStatementSummary } =
-        useContext(DataContext);
+    const {
+        assetItems,
+        jobCard,
+        incomeStatementSummary,
+        setIncomeStatementSummary,
+    } = useContext(DataContext);
+
+    const expenses: AssetItem[] = [];
+
+    const childcareExpenses = assetItems.filter(
+        (item) => item.getType() === AssetType.CHILDCARE
+    );
+
+    assetItems.forEach((item) => {
+        if (
+            (item.getCashflow() < 0 || item.getLoanInterest() > 0) &&
+            item.getType() !== AssetType.CHILDCARE
+        )
+            expenses.push(item);
+    });
+
+    const calculateExpense = () => {
+        const totalExpense =
+            expenses.reduce((acc, item) => {
+                if (item.getLoanInterest() > 0) {
+                    return acc + item.getLoanInterest();
+                }
+                return acc - item.getCashflow();
+            }, 0) + childcareExpenses[0].getCashflow();
+
+        setIncomeStatementSummary((prev) => {
+            return {
+                ...prev,
+                total_expenses: totalExpense,
+                monthly_cashflow: prev.total_income - totalExpense,
+            };
+        });
+    };
+
     useEffect(() => {
-        if (!jobCard) return;
-        const totalExpenses =
-            jobCard?.tax +
-            jobCard?.home_mortgage.interest +
-            jobCard?.school_loan.interest +
-            jobCard?.car_loan.interest +
-            jobCard?.credit_card.interest +
-            jobCard?.other_expenses +
-            jobCard?.child_expenses.number_of_children *
-                jobCard?.child_expenses.per_child_expense +
-            jobCard?.loan_payment.interest;
-        setIncomeStatementSummary((prev) => ({
-            ...prev,
-            total_expenses: totalExpenses,
-            monthly_cashflow: prev.total_income - totalExpenses,
-        }));
-    }, [jobCard]);
+        calculateExpense();
+    }, []);
     return (
         <div className="md:w-[48%]">
             <AccordionItem value="section-expense">
@@ -56,101 +79,54 @@ function SectionExpense() {
                                     </TableHead>
                                 </TableRow>
                             </TableHeader>
-                            {jobCard && (
-                                <TableBody>
+                            <TableBody>
+                                {expenses.map((item) => {
+                                    let title = '';
+                                    let amount = '';
+                                    if (item.getLoanInterest() > 0) {
+                                        title =
+                                            item.getType() === AssetType.JOB
+                                                ? 'Education loan interest: '
+                                                : 'Loan interest: ' +
+                                                  item.getTitle();
+                                        amount = numberToDollar(
+                                            -item.getLoanInterest()
+                                        );
+                                    } else {
+                                        title = item.getTitle() + ' expense';
+                                        amount = numberToDollar(
+                                            item.getCashflow()
+                                        );
+                                    }
+                                    return (
+                                        <TableRow key={item.getId()}>
+                                            <TableCell className="font-medium">
+                                                {title}
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                {amount}
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+
+                                {childcareExpenses.length > 0 && (
                                     <TableRow>
                                         <TableCell className="font-medium">
-                                            Taxes
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            {numberToDollar(jobCard.tax)}
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell className="font-medium">
-                                            Home Mortgage
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            {numberToDollar(
-                                                jobCard.home_mortgage.interest
-                                            )}
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell className="font-medium">
-                                            School Loan
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            {numberToDollar(
-                                                jobCard.school_loan.interest
-                                            )}
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell className="font-medium">
-                                            Car Loan
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            {numberToDollar(
-                                                jobCard.car_loan.interest
-                                            )}
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell className="font-medium">
-                                            Credit Card
+                                            Childcare
                                         </TableCell>
                                         <TableCell className="text-right">
                                             {numberToDollar(
-                                                jobCard.credit_card.interest
-                                            )}
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell className="font-medium">
-                                            Other Expenses
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            {numberToDollar(
-                                                jobCard.other_expenses
-                                            )}
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell className="font-medium">
-                                            Child Expenses
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            {numberToDollar(
-                                                jobCard.child_expenses
-                                                    .per_child_expense
+                                                childcareExpenses[0].getExpensePerChild()
                                             )}{' '}
-                                            x{' '}
-                                            {
-                                                jobCard.child_expenses
-                                                    .number_of_children
-                                            }
-                                            {' (childrens) '}={' '}
+                                            x {childcareExpenses[0].getQty()} ={' '}
                                             {numberToDollar(
-                                                jobCard.child_expenses
-                                                    .number_of_children *
-                                                    jobCard.child_expenses
-                                                        .per_child_expense
+                                                childcareExpenses[0].getCashflow()
                                             )}
                                         </TableCell>
                                     </TableRow>
-                                    <TableRow>
-                                        <TableCell className="font-medium">
-                                            Loan Payment
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            {numberToDollar(
-                                                jobCard.loan_payment.interest
-                                            )}
-                                        </TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            )}
+                                )}
+                            </TableBody>
                         </Table>
                     </div>
                     <h1 className="pt-4 text-center">Expenses Summary</h1>

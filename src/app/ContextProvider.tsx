@@ -60,6 +60,7 @@ function ContextProvider({
     const [incomeStatementSummary, setIncomeStatementSummary] =
         useState<IncomeStatementSummary>({
             total_income: 0,
+            passive_income: 0,
             total_expenses: 0,
             monthly_cashflow: 0,
         });
@@ -105,13 +106,17 @@ function ContextProvider({
         ''
     );
 
+    const sampleChildcare = new AssetItem();
+    sampleChildcare.setUpChildCare(400);
+
     sampleAssetItems.push(
         sampleJob,
         sampleStock1,
         sampleStock2,
         sampleRealEstate1,
         sampleRealEstate2,
-        sampleBusiness
+        sampleBusiness,
+        sampleChildcare
     );
 
     const [assetItems, setAssetItems] = useState<AssetItem[]>(sampleAssetItems);

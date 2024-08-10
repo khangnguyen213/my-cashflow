@@ -17,8 +17,6 @@ function IncomeStatement() {
                 <SectionIncome />
                 <SectionExpense />
             </Accordion>
-
-            <div className="section_expense"></div>
         </div>
     );
 }
