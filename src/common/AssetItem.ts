@@ -6,6 +6,9 @@ export enum AssetType {
     STOCK = 'STOCK',
     JOB = 'JOB',
     CHILDCARE = 'CHILDCARE',
+    HOME = 'HOME',
+    CAR = 'CAR',
+    CREDIT_CARD = 'CREDIT_CARD',
     NOT_DEFINED = 'NOT_DEFINED',
 }
 
@@ -143,6 +146,52 @@ export class AssetItem {
             new Date().getTime() +
             Math.random().toString(12).substring(2);
         this.expense_per_child = expense_per_child;
+        this.is_sellable = false;
+    }
+
+    setUpHome(loan: number, loan_interest: number) {
+        if (this.type !== AssetType.NOT_DEFINED)
+            throw new Error(ErrorMessage.ASSET_TYPE_ALREADY_SET);
+        this.type = AssetType.HOME;
+        this.id =
+            AssetType.HOME +
+            '_' +
+            new Date().getTime() +
+            Math.random().toString(12).substring(2);
+        this.title = 'Home';
+        this.loan = loan;
+        this.loan_interest = loan_interest;
+        this.is_sellable = false;
+    }
+
+    setUpCar(loan: number, loan_interest: number) {
+        if (this.type !== AssetType.NOT_DEFINED)
+            throw new Error(ErrorMessage.ASSET_TYPE_ALREADY_SET);
+        this.type = AssetType.CAR;
+        this.id =
+            AssetType.CAR +
+            '_' +
+            new Date().getTime() +
+            Math.random().toString(12).substring(2);
+        this.title = 'Car';
+        this.loan = loan;
+        this.loan_interest = loan_interest;
+        this.is_sellable = false;
+    }
+
+    setUpCreditCard(loan: number, loan_interest: number) {
+        if (this.type !== AssetType.NOT_DEFINED)
+            throw new Error(ErrorMessage.ASSET_TYPE_ALREADY_SET);
+        this.type = AssetType.CREDIT_CARD;
+        this.id =
+            AssetType.CREDIT_CARD +
+            '_' +
+            new Date().getTime() +
+            Math.random().toString(12).substring(2);
+        this.title = 'Credit Card';
+        this.loan = loan;
+        this.loan_interest = loan_interest;
+        this.is_sellable = false;
     }
 
     getId() {

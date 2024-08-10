@@ -109,6 +109,15 @@ function ContextProvider({
     const sampleChildcare = new AssetItem();
     sampleChildcare.setUpChildCare(400);
 
+    const sampleHome = new AssetItem();
+    sampleHome.setUpHome(20000, 320);
+
+    const sampleCar = new AssetItem();
+    sampleCar.setUpCar(5000, 100);
+
+    const sampleCreditCard = new AssetItem();
+    sampleCreditCard.setUpCreditCard(1000, 100);
+
     sampleAssetItems.push(
         sampleJob,
         sampleStock1,
@@ -116,7 +125,10 @@ function ContextProvider({
         sampleRealEstate1,
         sampleRealEstate2,
         sampleBusiness,
-        sampleChildcare
+        sampleChildcare,
+        sampleHome,
+        sampleCar,
+        sampleCreditCard
     );
 
     const [assetItems, setAssetItems] = useState<AssetItem[]>(sampleAssetItems);
