@@ -86,7 +86,7 @@ function SectionExpense() {
                                     if (item.getLoanInterest() > 0) {
                                         title =
                                             item.getType() === AssetType.JOB
-                                                ? 'Education loan interest: '
+                                                ? 'Education loan interest'
                                                 : 'Loan interest: ' +
                                                   item.getTitle();
                                         amount = numberToDollar(

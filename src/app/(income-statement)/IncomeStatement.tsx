@@ -5,7 +5,7 @@ import SectionExpense from './SectionExpense';
 
 function IncomeStatement() {
     return (
-        <div className="w-full">
+        <div className="w-full mb-8">
             <h1 className="p-1 text-center rounded-sm bg-slate-600 text-white dark:bg-slate-200 dark:text-black">
                 Income Statement
             </h1>
