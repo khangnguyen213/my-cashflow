@@ -67,79 +67,87 @@ function Cashflow() {
                 <div className="border-2 rounded-md overflow-hidden">
                     <Table>
                         <TableBody>
-                            {transactionBlocks.map((block) => {
-                                return (
-                                    <TableRow key={block.getId()}>
-                                        <TableCell className="text-left flex flex-col justify-center">
-                                            <p
-                                                className="text-[0.6rem] opacity-80"
-                                                suppressHydrationWarning
+                            {transactionBlocks
+                                .sort(
+                                    (a, b) =>
+                                        a.getTimestamp().getTime() -
+                                        b.getTimestamp().getTime()
+                                )
+                                .map((block) => {
+                                    return (
+                                        <TableRow key={block.getId()}>
+                                            <TableCell className="text-left flex flex-col justify-center">
+                                                <p
+                                                    className="text-[0.6rem] opacity-80"
+                                                    suppressHydrationWarning
+                                                >
+                                                    {block
+                                                        .getTimestamp()
+                                                        .toLocaleDateString(
+                                                            'vi-VN',
+                                                            {
+                                                                day: 'numeric',
+                                                                month: 'numeric',
+                                                                year: 'numeric',
+                                                                second: '2-digit',
+                                                                minute: '2-digit',
+                                                                hour: '2-digit',
+                                                            }
+                                                        )}
+                                                </p>
+                                                <p className="font-bold">
+                                                    {block.getTitle()}
+                                                </p>
+                                                <AlertDialog>
+                                                    <AlertDialogTrigger className="text-left line-clamp-2 opacity-90 text-xs">
+                                                        {block.getNote()}
+                                                    </AlertDialogTrigger>
+                                                    <AlertDialogContent className="w-[94%]">
+                                                        <AlertDialogHeader>
+                                                            <AlertDialogTitle className="flex justify-between">
+                                                                <div>
+                                                                    {block.getTitle()}
+                                                                </div>
+                                                                <div
+                                                                    className={`${
+                                                                        block.getFlowType() ==
+                                                                        TransactionFlowType.INCOME
+                                                                            ? 'text-emerald-500'
+                                                                            : 'text-rose-500'
+                                                                    }`}
+                                                                >
+                                                                    {numberToDollar(
+                                                                        block.getAmount()
+                                                                    )}
+                                                                </div>
+                                                            </AlertDialogTitle>
+                                                            <AlertDialogDescription className="text-left text-pretty">
+                                                                {block.getNote()}
+                                                            </AlertDialogDescription>
+                                                        </AlertDialogHeader>
+                                                        <AlertDialogFooter>
+                                                            <AlertDialogAction>
+                                                                Okay
+                                                            </AlertDialogAction>
+                                                        </AlertDialogFooter>
+                                                    </AlertDialogContent>
+                                                </AlertDialog>
+                                            </TableCell>
+                                            <TableCell
+                                                className={`text-right ${
+                                                    block.getFlowType() ==
+                                                    TransactionFlowType.INCOME
+                                                        ? 'text-emerald-500'
+                                                        : 'text-rose-500'
+                                                }`}
                                             >
-                                                {block
-                                                    .getTimestamp()
-                                                    .toLocaleDateString(
-                                                        'vi-VN',
-                                                        {
-                                                            day: 'numeric',
-                                                            month: 'numeric',
-                                                            year: 'numeric',
-                                                            second: '2-digit',
-                                                            minute: '2-digit',
-                                                            hour: '2-digit',
-                                                        }
-                                                    )}
-                                            </p>
-                                            <p className="font-bold">
-                                                {block.getTitle()}
-                                            </p>
-                                            <AlertDialog>
-                                                <AlertDialogTrigger className="text-left line-clamp-2 opacity-90 text-xs">
-                                                    {block.getNote()}
-                                                </AlertDialogTrigger>
-                                                <AlertDialogContent className="w-[94%]">
-                                                    <AlertDialogHeader>
-                                                        <AlertDialogTitle className="flex justify-between">
-                                                            <div>
-                                                                {block.getTitle()}
-                                                            </div>
-                                                            <div
-                                                                className={`${
-                                                                    block.getFlowType() ==
-                                                                    TransactionFlowType.INCOME
-                                                                        ? 'text-emerald-500'
-                                                                        : 'text-rose-500'
-                                                                }`}
-                                                            >
-                                                                {numberToDollar(
-                                                                    block.getAmount()
-                                                                )}
-                                                            </div>
-                                                        </AlertDialogTitle>
-                                                        <AlertDialogDescription className="text-left text-pretty">
-                                                            {block.getNote()}
-                                                        </AlertDialogDescription>
-                                                    </AlertDialogHeader>
-                                                    <AlertDialogFooter>
-                                                        <AlertDialogAction>
-                                                            Okay
-                                                        </AlertDialogAction>
-                                                    </AlertDialogFooter>
-                                                </AlertDialogContent>
-                                            </AlertDialog>
-                                        </TableCell>
-                                        <TableCell
-                                            className={`text-right ${
-                                                block.getFlowType() ==
-                                                TransactionFlowType.INCOME
-                                                    ? 'text-emerald-500'
-                                                    : 'text-rose-500'
-                                            }`}
-                                        >
-                                            {numberToDollar(block.getAmount())}
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
+                                                {numberToDollar(
+                                                    block.getAmount()
+                                                )}
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
                         </TableBody>
                     </Table>
                 </div>
