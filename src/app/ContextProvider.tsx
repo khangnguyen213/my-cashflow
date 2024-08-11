@@ -1,6 +1,11 @@
 'use client';
 
 import { AssetItem, AssetType } from '@/common/AssetItem';
+import {
+    TransactionBlock,
+    TransactionFlowType,
+    TransactionType,
+} from '@/common/TransactionBlock';
 import React, { createContext, useState } from 'react';
 
 export const SideNavBarContext = createContext<{
@@ -18,11 +23,17 @@ export const DataContext = createContext<{
     >;
     assetItems: AssetItem[];
     setAssetItems: React.Dispatch<React.SetStateAction<AssetItem[]>>;
+    transactionBlocks: TransactionBlock[];
+    setTransactionBlocks: React.Dispatch<
+        React.SetStateAction<TransactionBlock[]>
+    >;
 }>({
     incomeStatementSummary: null,
     setIncomeStatementSummary: () => {},
     assetItems: [],
     setAssetItems: () => {},
+    transactionBlocks: [],
+    setTransactionBlocks: () => {},
 });
 
 function ContextProvider({
@@ -106,13 +117,60 @@ function ContextProvider({
         sampleCreditCard
     );
 
+    const sampleTransactionBlock1 = new TransactionBlock(
+        TransactionFlowType.INCOME,
+        600,
+        TransactionType.SAVING
+    );
+    sampleTransactionBlock1.setTimestamp(new Date('07-07-2024'));
+
+    const sampleTransactionBlock2 = new TransactionBlock(
+        TransactionFlowType.INCOME,
+        2200,
+        TransactionType.PAYCHECK
+    );
+
+    sampleTransactionBlock2.setTimestamp(new Date('07-08-2024'));
+
+    const sampleTransactionBlocks: TransactionBlock[] = [
+        sampleTransactionBlock1,
+        sampleTransactionBlock2,
+        new TransactionBlock(
+            TransactionFlowType.EXPENSE,
+            -100,
+            TransactionType.DOODADS,
+            "Broken a phone and need to buy a new one, argggg why it's so expensive, I should have bought the insurance"
+        ),
+        new TransactionBlock(
+            TransactionFlowType.INCOME,
+            2200,
+            TransactionType.PAYCHECK
+        ),
+        new TransactionBlock(
+            TransactionFlowType.INCOME,
+            2200,
+            TransactionType.PAYCHECK
+        ),
+        new TransactionBlock(
+            TransactionFlowType.EXPENSE,
+            -500,
+            TransactionType.DOODADS,
+            'Go to the beach with family'
+        ),
+    ];
+
     const [assetItems, setAssetItems] = useState<AssetItem[]>(sampleAssetItems);
+    const [transactionBlocks, setTransactionBlocks] = useState<
+        TransactionBlock[]
+    >(sampleTransactionBlocks);
 
     const value = {
         incomeStatementSummary,
         setIncomeStatementSummary,
         assetItems,
         setAssetItems,
+        transactionBlocks,
+        setTransactionBlocks,
     };
 
     return (
