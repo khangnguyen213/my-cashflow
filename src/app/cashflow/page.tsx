@@ -99,7 +99,7 @@ function Cashflow() {
                                                     {block.getTitle()}
                                                 </p>
                                                 <AlertDialog>
-                                                    <AlertDialogTrigger className="text-left line-clamp-2 opacity-90 text-xs">
+                                                    <AlertDialogTrigger className="text-left line-clamp-2 opacity-90 text-xs text-pretty">
                                                         {block.getNote()}
                                                     </AlertDialogTrigger>
                                                     <AlertDialogContent className="w-[94%]">
