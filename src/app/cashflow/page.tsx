@@ -30,6 +30,8 @@ function Cashflow() {
         }
         return acc + block.getAmount();
     }, 0);
+
+    let cash = 0;
     return (
         <main className="flex min-h-screen flex-col items-center gap-2 px-6">
             <div className="w-full mb-8">
@@ -133,17 +135,34 @@ function Cashflow() {
                                                     </AlertDialogContent>
                                                 </AlertDialog>
                                             </TableCell>
-                                            <TableCell
-                                                className={`text-right ${
-                                                    block.getFlowType() ==
-                                                    TransactionFlowType.INCOME
-                                                        ? 'text-emerald-500'
-                                                        : 'text-rose-500'
-                                                }`}
-                                            >
-                                                {numberToDollar(
+                                            <TableCell className="text-right">
+                                                <div className="flex flex-col gap-1">
+                                                    <div className="text-[0.7rem] opacity-50">
+                                                        {cash}
+                                                    </div>
+                                                    <div
+                                                        className={`${
+                                                            block.getFlowType() ==
+                                                            TransactionFlowType.INCOME
+                                                                ? 'text-emerald-500'
+                                                                : 'text-rose-500'
+                                                        }`}
+                                                    >
+                                                        {numberToDollar(
+                                                            block.getAmount()
+                                                        )}
+                                                    </div>
+                                                    <div className="text-[0.7rem] opacity-50">
+                                                        ={' '}
+                                                        {
+                                                            (cash +=
+                                                                block.getAmount())
+                                                        }
+                                                    </div>
+                                                </div>
+                                                {/* {numberToDollar(
                                                     block.getAmount()
-                                                )}
+                                                )} */}
                                             </TableCell>
                                         </TableRow>
                                     );
