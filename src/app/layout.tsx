@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className + ' pt-20'}>
+      <body className={inter.className}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -30,7 +30,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Header />
-          <ContextProvider>{children}</ContextProvider>
+          <ContextProvider>
+            <div className="w-full pt-20">{children}</div>
+          </ContextProvider>
         </ThemeProvider>
       </body>
     </html>

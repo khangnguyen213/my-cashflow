@@ -45,7 +45,7 @@ function ContextProvider({
 
   const [incomeStatementSummary, setIncomeStatementSummary] =
     useState<IncomeStatementSummary>({
-      total_income: 0,
+      salary: 0,
       passive_income: 0,
       total_expenses: 0,
     });

@@ -31,7 +31,7 @@ interface JobCard {
 }
 
 interface IncomeStatementSummary {
-  total_income: number;
+  salary: number;
   passive_income: number;
   total_expenses: number;
 }

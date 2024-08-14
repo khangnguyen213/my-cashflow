@@ -50,7 +50,6 @@ function SectionExpense() {
       return {
         ...prev,
         total_expenses: totalExpense,
-        monthly_cashflow: prev.total_income - totalExpense,
       };
     });
   };
@@ -136,7 +135,8 @@ function SectionExpense() {
               <TableCell className="text-right text-base font-medium">
                 {incomeStatementSummary &&
                   numberToDollar(
-                    incomeStatementSummary.total_income -
+                    incomeStatementSummary.salary +
+                      incomeStatementSummary.passive_income -
                       incomeStatementSummary.total_expenses
                   )}
               </TableCell>
