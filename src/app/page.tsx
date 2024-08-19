@@ -11,9 +11,13 @@ import {
 } from '@/components/ui/table';
 import numberToDollar from '@/utils/NumberToDollar';
 import CashflowSummary from './cashflow/components/CashflowSummary';
+import { Button } from '@/components/ui/button';
+import useFinance from '@/hooks/useFinance';
 
 export default function Home() {
-  const { incomeStatementSummary, transactionBlocks } = useContext(DataContext);
+  const { incomeStatementSummary, transactionBlocks, setTransactionBlocks } =
+    useContext(DataContext);
+  const { receivePaycheck } = useFinance();
   return (
     <main className="flex min-h-screen flex-col items-center gap-2 px-6">
       <div className="w-full">
@@ -66,6 +70,9 @@ export default function Home() {
           </Table>
         </div>
       )}
+      <Button variant="outline" onClick={receivePaycheck}>
+        Receive Paycheck
+      </Button>
     </main>
   );
 }

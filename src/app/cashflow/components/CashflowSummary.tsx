@@ -25,7 +25,7 @@ function CashflowSummary({ transactionBlocks }: CashflowSummaryProps) {
             {numberToDollar(income)}
           </h1>
           <h2 className="text-center text-xs md:text-sm font-medium opacity-75">
-            INCOME
+            CASH IN
           </h2>
         </div>
         <div className="w-[48%] rounded-md border-2 py-3 bg-white text-black">
@@ -33,7 +33,7 @@ function CashflowSummary({ transactionBlocks }: CashflowSummaryProps) {
             {numberToDollar(expense)}
           </h1>
           <h2 className="text-center text-xs md:text-sm font-medium opacity-75">
-            EXPENSE
+            CASH OUT
           </h2>
         </div>
       </div>

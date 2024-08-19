@@ -20,8 +20,7 @@ import { DataContext } from '../../ContextProvider';
 import { AssetItem, AssetType } from '@/common/AssetItem';
 
 function SectionIncome() {
-  const { assetItems, incomeStatementSummary, setIncomeStatementSummary } =
-    useContext(DataContext);
+  const { assetItems, incomeStatementSummary } = useContext(DataContext);
 
   const jobs: AssetItem[] = [];
   const stockIncomes: AssetItem[] = [];
@@ -44,27 +43,6 @@ function SectionIncome() {
         break;
     }
   });
-
-  const calculateIncome = () => {
-    const jobSalary = jobs.reduce((acc, item) => acc + item.getCashflow(), 0);
-
-    const passiveIncome = stockIncomes
-      .concat(realestateIncomes)
-      .concat(businesseIncomes)
-      .reduce((acc, item) => acc + item.getCashflow(), 0);
-
-    setIncomeStatementSummary((prev) => {
-      return {
-        ...prev,
-        salary: jobSalary,
-        passive_income: passiveIncome,
-      };
-    });
-  };
-
-  useEffect(() => {
-    calculateIncome();
-  }, []);
 
   return (
     <div className="md:w-[48%]">

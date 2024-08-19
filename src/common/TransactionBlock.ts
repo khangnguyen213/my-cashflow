@@ -1,87 +1,100 @@
+import { TransactionBlockInterface } from './interfaces';
+
 export enum TransactionFlowType {
-    INCOME = 'INCOME',
-    EXPENSE = 'EXPENSE',
+  INCOME = 'INCOME',
+  EXPENSE = 'EXPENSE',
 }
 
 export enum TransactionType {
-    PAYCHECK = 'PAYCHECK',
-    SAVING = 'SAVING',
-    DOODADS = 'DOODADS',
-    UNEMPLOYMENT = 'UNEMPLOYMENT',
-    OTHER = 'OTHER',
+  PAYCHECK = 'PAYCHECK',
+  SAVING = 'SAVING',
+  DOODADS = 'DOODADS',
+  UNEMPLOYMENT = 'UNEMPLOYMENT',
+  OTHER = 'OTHER',
 }
 
 export class TransactionBlock {
-    private id: string;
-    private flow_type: TransactionFlowType;
-    private amount = 0;
-    private title = '';
-    private note = '';
-    private timestamp: Date;
+  private id: string;
+  private flow_type: TransactionFlowType;
+  private amount = 0;
+  private title = '';
+  private note = '';
+  private timestamp: Date;
 
-    constructor(
-        flow_type: TransactionFlowType,
-        amount: number,
-        title: TransactionType,
-        note = ''
-    ) {
-        this.id =
-            title +
-            '_' +
-            new Date().getTime() +
-            Math.random().toString(12).substring(2);
-        this.flow_type = flow_type;
-        this.amount = amount;
-        this.title = title;
-        this.note = note;
-        this.timestamp = new Date();
-    }
+  constructor(
+    flow_type: TransactionFlowType,
+    amount: number,
+    title: TransactionType,
+    note = '',
+    obj: TransactionBlockInterface | null = null
+  ) {
+    this.id =
+      title +
+      '_' +
+      new Date().getTime() +
+      Math.random().toString(12).substring(2);
+    this.flow_type = flow_type;
+    this.amount = amount;
+    this.title = title;
+    this.note = note;
+    this.timestamp = new Date();
 
-    getAmount() {
-        return this.amount;
+    if (obj) {
+      // this.timestamp = new Date(obj.timestamp);
+      // this.amount = parseFloat(obj.amount.toString());
+      // this.flow_type = obj.flow_type as TransactionFlowType;
+      // this.title = obj.title as TransactionType;
+      // this.id = obj.id;
+      // this.note = obj.note;
+      Object.assign(this, obj);
     }
+  }
 
-    getTitle() {
-        return this.title;
-    }
+  getAmount() {
+    return this.amount;
+  }
 
-    getNote() {
-        return this.note;
-    }
+  getTitle() {
+    return this.title;
+  }
 
-    getFlowType() {
-        return this.flow_type;
-    }
+  getNote() {
+    return this.note;
+  }
 
-    getId() {
-        return this.id;
-    }
+  getFlowType() {
+    return this.flow_type;
+  }
 
-    getTimestamp() {
-        return this.timestamp;
-    }
+  getId() {
+    return this.id;
+  }
 
-    setAmount(amount: number) {
-        this.amount = amount;
-    }
+  getTimestamp() {
+    return this.timestamp;
+  }
 
-    setTitle(title: TransactionType) {
-        this.title = title;
-    }
+  setAmount(amount: number) {
+    this.amount = amount;
+  }
 
-    setNote(note: string) {
-        this.note = note;
-    }
+  setTitle(title: TransactionType) {
+    this.title = title;
+  }
 
-    setFlowType(flow_type: TransactionFlowType) {
-        this.flow_type = flow_type;
-    }
+  setNote(note: string) {
+    this.note = note;
+  }
 
-    setId(id: string) {
-        this.id = id;
-    }
+  setFlowType(flow_type: TransactionFlowType) {
+    this.flow_type = flow_type;
+  }
 
-    setTimestamp(timestamp: Date) {
-        this.timestamp = timestamp;
-    }
+  setId(id: string) {
+    this.id = id;
+  }
+
+  setTimestamp(timestamp: Date) {
+    this.timestamp = timestamp;
+  }
 }

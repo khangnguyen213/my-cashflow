@@ -37,26 +37,6 @@ function SectionExpense() {
       expenses.push(item);
   });
 
-  const calculateExpense = () => {
-    const totalExpense =
-      expenses.reduce((acc, item) => {
-        if (item.getLoanInterest() > 0) {
-          return acc + item.getLoanInterest();
-        }
-        return acc - item.getCashflow();
-      }, 0) + childcareExpenses[0].getCashflow();
-
-    setIncomeStatementSummary((prev) => {
-      return {
-        ...prev,
-        total_expenses: totalExpense,
-      };
-    });
-  };
-
-  useEffect(() => {
-    calculateExpense();
-  }, []);
   return (
     <div className="md:w-[48%]">
       <AccordionItem value="section-expense">
