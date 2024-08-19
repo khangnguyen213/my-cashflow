@@ -10,11 +10,14 @@ import {
 } from '@/components/ui/sheet';
 
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
+import clsx from 'clsx';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 function SideNavBar() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathName = usePathname();
   const links = [
     {
       name: 'Home',
@@ -40,17 +43,28 @@ function SideNavBar() {
           Navigate to different pages
         </SheetDescription>
         <ul>
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setIsOpen(false)}
-            >
-              <li className="text-lg font-semibold text-foreground cursor-pointer hover:bg-gray-300 hover:text-slate-900 dark:hover:bg-gray-100 dark:hover:text-slate-900 p-2 rounded-md transition-colors duration-200">
-                {link.name}
-              </li>
-            </Link>
-          ))}
+          {links.map((link) => {
+            const isActive = pathName === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+              >
+                <li
+                  className={clsx(
+                    'text-lg font-semibold text-foreground cursor-pointer hover:bg-gray-300 hover:text-slate-900 dark:hover:bg-gray-100 dark:hover:text-slate-900 p-2 rounded-md transition-colors duration-200',
+                    {
+                      'bg-gray-300 text-slate-900 dark:bg-gray-100 dark:text-slate-900':
+                        isActive,
+                    }
+                  )}
+                >
+                  {link.name}
+                </li>
+              </Link>
+            );
+          })}
         </ul>
       </SheetContent>
     </Sheet>

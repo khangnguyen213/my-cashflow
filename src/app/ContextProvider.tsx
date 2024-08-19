@@ -25,6 +25,8 @@ export const DataContext = createContext<{
   setTransactionBlocks: React.Dispatch<
     React.SetStateAction<TransactionBlock[]>
   >;
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }>({
   incomeStatementSummary: null,
   setIncomeStatementSummary: () => {},
@@ -32,6 +34,8 @@ export const DataContext = createContext<{
   setAssetItems: () => {},
   transactionBlocks: [],
   setTransactionBlocks: () => {},
+  isLoading: true,
+  setIsLoading: () => {},
 });
 
 function ContextProvider({
@@ -40,18 +44,17 @@ function ContextProvider({
   children: React.ReactNode;
 }>) {
   const [isSideNavBarOpen, setIsSideNavBarOpen] = useState<boolean>(false);
-
   const [incomeStatementSummary, setIncomeStatementSummary] =
     useState<IncomeStatementSummary>({
       salary: 0,
       passive_income: 0,
       total_expenses: 0,
     });
-
   const [assetItems, setAssetItems] = useState<AssetItem[]>([]);
   const [transactionBlocks, setTransactionBlocks] = useState<
     TransactionBlock[]
   >([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const value = {
     incomeStatementSummary,
@@ -60,6 +63,8 @@ function ContextProvider({
     setAssetItems,
     transactionBlocks,
     setTransactionBlocks,
+    isLoading,
+    setIsLoading,
   };
 
   return (

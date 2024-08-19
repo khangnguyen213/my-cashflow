@@ -17,7 +17,16 @@ function useFinance() {
     setTransactionBlocks,
     setIncomeStatementSummary,
     setAssetItems,
+    setIsLoading,
   } = useContext(DataContext);
+
+  const handleLoadingStart = useCallback(() => {
+    setIsLoading(true);
+  }, [setIsLoading]);
+
+  const handleLoadingEnd = useCallback(() => {
+    setIsLoading(false);
+  }, [setIsLoading]);
 
   const mapObjectToAssetItem = useCallback((object: any) => {
     return new AssetItem(object);
@@ -70,10 +79,10 @@ function useFinance() {
     return [];
   }, [mapObjectToAssetItem]);
 
-  function handleMockData() {
+  const handleMockData = useCallback(() => {
     setAssetItemsInLocalStorage(SAMPLE_ASSET_ITEMS);
     setTransactionBlocksInLocalStorage(SAMPLE_TRANSACTION_BLOCKS);
-  }
+  }, [setAssetItemsInLocalStorage, setTransactionBlocksInLocalStorage]);
 
   function retrieveFinanceDataFromLocalStorage() {
     const assetItemsFromLocalStorage = getAssetItemsFromLocalStorage();
@@ -96,8 +105,6 @@ function useFinance() {
     const businesseIncomes: AssetItem[] = [];
 
     const expenses: AssetItem[] = [];
-
-    console.log(assetItems);
 
     const childcareExpenses = assetItems.filter(
       (item) => item.getType() === AssetType.CHILDCARE
@@ -180,6 +187,8 @@ function useFinance() {
     calculateIncomeAndExpense,
     handleMockData,
     retrieveFinanceDataFromLocalStorage,
+    handleLoadingStart,
+    handleLoadingEnd,
   };
 }
 

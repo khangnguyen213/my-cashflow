@@ -11,17 +11,23 @@ function DataSetupLayer({
     calculateIncomeAndExpense,
     handleMockData,
     retrieveFinanceDataFromLocalStorage,
+    handleLoadingEnd,
+    handleLoadingStart,
   } = useFinance();
 
   const { assetItems, transactionBlocks } = useContext(DataContext);
 
   useEffect(() => {
     // handleMockData();
+    handleLoadingStart();
     retrieveFinanceDataFromLocalStorage();
+    handleLoadingEnd();
   }, []);
 
   useEffect(() => {
+    handleLoadingStart();
     calculateIncomeAndExpense();
+    handleLoadingEnd();
   }, [assetItems, transactionBlocks]);
 
   return <>{children}</>;

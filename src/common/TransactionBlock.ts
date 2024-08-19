@@ -47,6 +47,7 @@ export class TransactionBlock {
       // this.id = obj.id;
       // this.note = obj.note;
       Object.assign(this, obj);
+      this.timestamp = new Date(obj.timestamp);
     }
   }
 
